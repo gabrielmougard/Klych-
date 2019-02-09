@@ -242,7 +242,7 @@ def start_photobooth():
     else:
         pixel_width = 500
         pixel_height = config.monitor_h * pixel_width // config.monitor_w
-		camera.resolution = (pixel_width, pixel_height) # set camera resolution to low res
+	    camera.resolution = (pixel_width, pixel_height) # set camera resolution to low res
 
 
     ### START of Step 2 ###
