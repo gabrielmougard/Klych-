@@ -114,7 +114,7 @@ def clear_pics():
 	print "Deleted previous pics"
 	for x in range(0, 3): #blink light
 		GPIO.output(getReady,True) 
-		sleep(0.1)
+	    sleep(0.1)
 		GPIO.output(getReady,False)
 		sleep(0.1)
         GPIO.output(pose,True) 
@@ -393,8 +393,8 @@ while True:
     GPIO.output(getReady,True) #turn on the light showing users they can push the button
     input(pygame.event.get()) # press escape to exit pygame. Then press ctrl-c to exit python.
     GPIO.wait_for_edge(btn_pin, GPIO.FALLING)
-	time.sleep(config.debounce) #debounce
-	start_photobooth()
+    time.sleep(config.debounce) #debounce
+    start_photobooth()
 
 
 
