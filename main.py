@@ -17,6 +17,7 @@ import socket
 import pygame
 import config
 from signal import alarm, signal, SIGALRM, SIGKILL
+import mailing # for sending formatted mail
 
 ### PINS ###
 buzzer = 18 # Red button 
@@ -327,6 +328,7 @@ def start_photobooth():
         if (connected==False):
             print "bad internet connection"
 
+        mail = 
         while connected:
             # TODO : send email with the gifs and/or the images with emailing.py
 
