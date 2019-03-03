@@ -2,13 +2,9 @@
 
 Our smart photoboothing solution.
 
-## What's done so far
-
-* `mailing.py` contains the mailing engine...
-
 ## What do we have to do ?
 
-the game loop, the camera preview, "off-line" mode, light system, electronic, Web Platform.
+Integrate the calls for the API in order to post the pictures on the platform.
 
 ## Nota Bene
 

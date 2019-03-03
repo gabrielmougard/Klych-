@@ -328,9 +328,8 @@ def start_photobooth():
         if (connected==False):
             print "bad internet connection"
 
-        mail = 
         while connected:
-            # TODO : send email with the gifs and/or the images with emailing.py
+            # TODO : send pictures to platform (need API of the platform)
 
 
 
@@ -397,26 +396,4 @@ while True:
     GPIO.wait_for_edge(btn_pin, GPIO.FALLING)
     time.sleep(config.debounce) #debounce
     start_photobooth()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
