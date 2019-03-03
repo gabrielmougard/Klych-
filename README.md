@@ -1,11 +1,9 @@
-﻿# Klyché
+# Klyché - A smart photoboothing experience
 
-Our smart photoboothing solution.
+## Platform
+Contains the web platform with the facial recognition. Can be deployed 
+with `docker-compose up -d` command.
 
-## What do we have to do ?
-
-Integrate the calls for the API in order to post the pictures on the platform.
-
-## Nota Bene
-
-I don't understand why, but it seems to appear that the indentation is wrong in some places in `main.py`... My local file is fine though..
+## System
+The codebase for the embedded Python code in the RaspberryPi which 
+empower our photobooting hardware.

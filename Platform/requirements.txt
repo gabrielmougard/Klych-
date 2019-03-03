@@ -1,0 +1,7 @@
+Fancy_term
+flask
+requests
+face_recognition
+dlib
+face_recognition_models
+numpy
