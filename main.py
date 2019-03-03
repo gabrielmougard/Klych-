@@ -17,7 +17,7 @@ import socket
 import pygame
 import config
 from signal import alarm, signal, SIGALRM, SIGKILL
-import mailing # for sending formatted mail
+import requests
 
 ### PINS ###
 buzzer = 18 # Red button 
@@ -52,7 +52,7 @@ offset_y = 0 # how far off to left corner to display photos
 replay_delay = 1 # how much to wait in-between showing pics on-screen after taking
 replay_cycles = 2 # how many times to show each photo on-screen after taking
 test_server = 'www.google.com'
-
+FILENAMES = []
 #####################
 
 ### OTHER CONFIG ###
@@ -83,6 +83,8 @@ pygame.display.toggle_fullscreen()
 ####################
 
 ### FUNCTIONS ###
+
+
 
 # clean up running programs as needed when main program exits
 def cleanup():
@@ -259,7 +261,7 @@ def start_photobooth():
                 time.slepp(2)
                 GPIO.output(pose,True) # turn on the LED
                 filename = config.file_path + now + '-0' + str(i) +'.jpg'
-
+                FILENAMES[i] = filename #save it
                 filenameGIF = config.gif_path + filename[len(config.gif_path):]
                 
                 camera.hflip = False # flip back when taking photo
@@ -328,18 +330,16 @@ def start_photobooth():
         if (connected==False):
             print "bad internet connection"
 
-        while connected:
+        while is_connected():
             # TODO : send pictures to platform (need API of the platform)
-
-
-
-
-
-
-
-
-
-
+            auth = {'password':'leubzezeh97869UYVD'}
+            api_url = "https://home.plawn-inc.science/face/api/upload"
+            
+            for i in range(len(FILENAMES)):
+                file = {'file':open(config.file_path+FILENAMES[i],'rb')}
+                r = requests.post(api_url, data=auth, files=file)
+                print(r)
+                print(r.text)
 
     ### START of Step 4 ###
 
