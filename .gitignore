@@ -1,0 +1,10 @@
+.vscode
+photos/*
+temp/*
+photos
+__pycache__
+archives
+build.zip
+*.jpg
+*.png
+./photos
