@@ -194,7 +194,7 @@ class face_db:
         d['next_id'] = self.next_id
         d['nb_photos'] = self.nb_photos
         d['tolerance'] = self.tolerance
-        d['hashes'] = self.photos_hashes
+        d['hashes'] = list(self.photos_hashes)
         with open(filename, 'w') as f:
             json.dump(d, f, cls=NumpyEncoder)
 
@@ -209,4 +209,5 @@ class face_db:
             int(key): content['existing_faces_d'][key] for key in content['existing_faces_d']}
         self.existing_faces = [np.asarray(i)
                                for i in content['existing_faces']]
+        self.photos_hashes = set(content['hashes'])
         # should load the hashes
