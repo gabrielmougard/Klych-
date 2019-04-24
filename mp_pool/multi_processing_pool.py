@@ -1,6 +1,6 @@
 import multiprocessing as mp
 import threading
-
+import psutil
 
 class Task:
     __slots__ = ['func', 'args']
@@ -14,8 +14,6 @@ class Task:
 
 
 class Pool:
-    MAX_PROCESS_ID = 100
-
     def __init__(self, processes):
         self.id_worker = -1
         self.process_id = 0
@@ -25,7 +23,8 @@ class Pool:
         self.free_workers = mp.Queue()
         self.lock = mp.Lock()
         self.event = mp.Event()
-
+        self.max_core = psutil.cpu_count() -1 
+        self.current_affinity = -1
         # init the pool
         for _ in range(self.processes):
             self._new_worker()
@@ -34,9 +33,19 @@ class Pool:
 
     def _new_worker(self):
         idx = self.get_id_worker()
-        w = Worker(self, mp.Queue(), mp.Queue(), mp.Event(), idx, mp.Lock())
+        affinity = self.get_affinity()
+        d = d = dict(affinity=affinity)
+        print('created worker with affinity {}'.format(affinity))
+        w = Worker(self, mp.Queue(), mp.Queue(), mp.Event(), idx, mp.Lock(), kwargs=d)
         self.workers.append(w)
         self.free_workers.put(idx)
+    def get_affinity(self):
+        if self.current_affinity < self.max_core:
+            self.current_affinity += 1
+        else:
+            self.current_affinity = 0
+        return self.current_affinity
+
 
     def get_id_worker(self):
         self.lock.acquire()
@@ -69,8 +78,8 @@ class Pool:
 
 
 class Worker(mp.Process):
-    def __init__(self, pool, in_queue, out_queue, event, idx, lock):
-        mp.Process.__init__(self)
+    def __init__(self, pool, in_queue, out_queue, event, idx, lock, **kwargs):
+        mp.Process.__init__(self, **kwargs)
         self.queue = in_queue
         self.output_queue = out_queue
         self.event = event

@@ -8,9 +8,9 @@ import sys
 import json
 import Fancy_term as term
 from flask import Flask, flash, request, redirect, url_for, jsonify
+import mp_pool 
 
-
-from multiprocessing import Pool
+pool = mp_pool.Pool(6)
 print_info = term.Smart_print(style=term.Style(
     color=term.colors.yellow, substyle=["bold"]))
 print_error = term.Smart_print(style=term.Style(
@@ -28,6 +28,7 @@ UPLOAD_FOLDER = cfg['upload_folder']
 use_gpu = cfg['use_gpu']
 tolerance = cfg['tolerance']
 using_resize = cfg['using_resize']
+nb_worker = cfg['workers']
 
 if use_gpu:
     print_info('Using GPU')
@@ -54,7 +55,7 @@ db_filename = cfg['db_filename']
 
 if len(sys.argv) >= 2:
     if sys.argv[1] == 'load':
-        db = recog.face_db()
+        db = recog.face_db(nb_worker=nb_worker)
         db.proper_load(db_filename)
         db.tolerance = tolerance
         print('loaded {} faces'.format(len(db.existing_faces)))
@@ -116,7 +117,7 @@ def upload():
     file.save(path)
     temp_filename = os.path.join('temp', '{}.jpg'.format(idx))
     if not big_file:
-        img_handler.resize_image(path, max_size, temp_filename)
+        pool.map_one(img_handler.resize_image, (path, max_size, temp_filename))
     added, took = db.add_new_picture(path, temp_filename)
     if added == -1 :
         os.remove(path)

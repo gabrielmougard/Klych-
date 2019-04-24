@@ -9,14 +9,17 @@ def test(a, b):
 
 
 def pp(name):
-    for i in range (1000):
+    for i in range (1000000):
         a, b = rd.randint(1,10000), rd.randint(1,10000)
         res1, res2 = test(a, b), p.map_one(test, (a,b))
         
         assert res1 == res2, "thread {} |worker {} call no {} | {} != {}".format(name,1, i, res1, res2)
     print('thread {} finished without errors'.format(name))
-p = mp.Pool(5)
+
+
 nb_thread = 6
+p = mp.Pool(nb_thread)
+
 
 threads = []
 for i in range(nb_thread):

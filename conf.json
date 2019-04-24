@@ -7,5 +7,5 @@
     "use_gpu":false,
     "tolerance":0.5,
     "using_resize":true,
-    "workers":4
+    "workers":6
 }

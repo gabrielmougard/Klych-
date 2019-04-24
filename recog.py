@@ -111,11 +111,9 @@ class face_db:
         img = f.load_image_file(photo_file)
         t = time.time()
         locations = self.pool.map_one(self.map_find, (img, ))
-        # print('hey', locations)
-        # locations = f.face_locations(img, model=self.model1)
-        print('locations are', locations)
+        #locations = f.face_locations(img, model=self.model1)
         face = face_encodings(img, locations, 1, self.model2)[0]
-        print('time to encode is {} s'.format(time.time() - t))
+        #print('time to encode is {} s'.format(time.time() - t))
         del locations
         del img
         result = distances_faces(self.existing_faces, face)
@@ -123,10 +121,10 @@ class face_db:
         i = np.argmin(result)
         if result[i] <= self.tolerance:
             del result
-            print('found id {}'.format(i))
+            #print('found id {}'.format(i))
             return self.existing_faces_d[i]
         else:
-            print('The face is not in the db')
+            #print('The face is not in the db')
             return []
 
     def _add(self, face, photo_filename):
@@ -138,7 +136,7 @@ class face_db:
     def add_new_picture(self, photo_filename, temp_photo=None):
         new_faces = 0
         # we should check for dupes
-        l_hash = md5(temp_photo)
+        l_hash = self.pool.map_one(md5, (temp_photo,))
         if l_hash in self.photos_hashes :
             return -1
         else :
@@ -148,8 +146,8 @@ class face_db:
         img = f.load_image_file(photo_filename if temp_photo == None else temp_photo)
         
         t = time.time()
-        error = True
         locations = self.pool.map_one(self.map_find, (img, ))
+        #locations = f.face_locations(img, model=self.model1)
         faces = face_encodings(img, locations, 1, self.model2)
         
         print('time to encode is {} s'.format(time.time() - t))
@@ -165,9 +163,7 @@ class face_db:
             for res, face in zip(result, faces):
                 i = np.argmin(res)
                 if res[i] <= self.tolerance:
-                    print(res)
                     self.existing_faces_d[i].append(photo_filename)
-                    print('added to id {}'.format(i))
                 else:
                     # the face doesn't exists yet
                     self._add(face, photo_filename)
@@ -176,7 +172,7 @@ class face_db:
 
             self.nb_photos += 1
 
-        print('added {}'.format(new_faces))
+        #print('added {}'.format(new_faces))
         return new_faces
 
     def next_name(self):
