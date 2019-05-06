@@ -1,0 +1,27 @@
+body{
+  background-color: #282c34;
+}
+
+.App{
+  text-align: center;
+  padding: 0.1px;
+  background-color: #282c34;
+  min-height: 100vh;
+  /* margin: auto; */
+
+  /* display: flex; */
+  /* flex-direction: column; */
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+.center__{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.just_padded{
+}
