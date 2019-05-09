@@ -7,7 +7,8 @@ import Gallery from 'react-grid-gallery';
 
 
 import dataUri_to_image from './utils.js';
-import loading_img from './loading.gif';
+import loading_img from './loading_old2.gif';
+import ProjectPool from './Logo_ProjectPool2.png';
 import './App.css';
 
 
@@ -19,7 +20,7 @@ const photo_address = 'https://cdn.plawn-inc.science/face/';
 const final_upload_adress = addr + '/' + upload_adress;
 
 // Settings 
-const title = 'Klych--';
+const title = "Klych'é";
 
 // same as on the flask python app || Shouldn't be changed
 const filename = 'file';
@@ -64,7 +65,8 @@ class App extends Component {
     return (
       <div>
         <div className="App">
-          <h1>Find your pictures</h1>
+          <h1>Klych'é</h1>
+          <p>Retrouve tes photos avec Garage ISEP !</p>
           {this.state.is_loading &&
             <img src={loading_img} style={{ maxWidth: '100%' }} className="center__"></img>}
           {this.state.photo_roll_on &&
@@ -81,6 +83,11 @@ class App extends Component {
                 onSelectImage={i => { this.state.photos[i].isSelected = !this.state.photos[i].isSelected; }}
               />}
           </div>
+         
+        </div>
+        <div className="footer">
+            Made by the 
+            {<img id="projectPool" src={ProjectPool} hspace="20"></img>} team      
         </div>
       </div>
     );

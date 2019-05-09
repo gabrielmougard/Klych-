@@ -1,11 +1,11 @@
 body{
-  background-color: #282c34;
+  background-color: #27b899;
 }
 
 .App{
   text-align: center;
   padding: 0.1px;
-  background-color: #282c34;
+  background-color: #27b899;
   min-height: 100vh;
   /* margin: auto; */
 
@@ -21,6 +21,20 @@ body{
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+
+.footer {
+  color: white;
+  float: left;
+  margin-left: 5%;
+  font-size: calc(10px + 2vmin);
+  margin-bottom: 5%;  
+
+}
+
+#projectPool {
+
+  margin-top: 5%;
 }
 
 .just_padded{
