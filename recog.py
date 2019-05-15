@@ -147,6 +147,8 @@ class face_db:
         
         t = time.time()
         locations = self.pool.map_one(self.map_find, (img, ))
+        if len(locations) == 0 :
+            return -1, False
         #locations = f.face_locations(img, model=self.model1)
         faces = face_encodings(img, locations, 1, self.model2)
         
@@ -157,13 +159,16 @@ class face_db:
             for face in faces :
                 self._add(face, photo_filename)
                 return new_faces
+        
         result = map(lambda face: distances_faces(
             self.existing_faces, face), faces)
+        added_to_profile = False
         with self.lock :
             for res, face in zip(result, faces):
                 i = np.argmin(res)
                 if res[i] <= self.tolerance:
                     self.existing_faces_d[i].append(photo_filename)
+                    added_to_profile = True
                 else:
                     # the face doesn't exists yet
                     self._add(face, photo_filename)
@@ -173,7 +178,7 @@ class face_db:
             self.nb_photos += 1
 
         #print('added {}'.format(new_faces))
-        return new_faces
+        return new_faces, added_to_profile
 
     def next_name(self):
         with self.lock :

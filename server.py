@@ -8,7 +8,7 @@ import sys
 import json
 import Fancy_term as term
 from flask import Flask, flash, request, redirect, url_for, jsonify
-import mp_pool 
+import mp_pool
 
 pool = mp_pool.Pool(6)
 print_info = term.Smart_print(style=term.Style(
@@ -111,20 +111,26 @@ def upload():
     if 'big_file' in request.form and request.form['big_file']:
         big_file = True
     filename = file.filename
-    idx = make_id() 
-    path = os.path.join(UPLOAD_FOLDER, '{}.jpg'.format(idx))
+
+    _id = make_id()
+    path = os.path.join(UPLOAD_FOLDER, '{}.jpg'.format(_id))
     print('saving at path {}'.format(path))
     file.save(path)
-    temp_filename = os.path.join('temp', '{}.jpg'.format(idx))
+    temp_filename = os.path.join('temp', '{}.jpg'.format(_id))
     if not big_file:
         pool.map_one(img_handler.resize_image, (path, max_size, temp_filename))
-    added, took = db.add_new_picture(path, temp_filename)
-    if added == -1 :
+    added, added_to_profile, took = db.add_new_picture(path, temp_filename)
+
+    # file already exists
+    if added == -1:
         os.remove(path)
+    # always removing tempfile
     os.remove(temp_filename)
+
     return jsonify({
         'added': added,
-        'took': took
+        'added_to_profile': added_to_profile,
+        'took': took,
     })
 
 
@@ -157,7 +163,7 @@ def how_many_photos():
 @check_has_file
 def find():
     file = request.files['file']
-    filename = file.filename
+    filename = make_id() + '.jpg'
     path = os.path.join('temp', filename)
     file.save(path)
     # auto-resize part
@@ -177,10 +183,10 @@ def find():
         return jsonify({'error': "can't find face", 'found': found})
 
     # trying to remove the temp file
-    try:
-        os.remove(path)
-    except:
-        print_error('error removing temp file')
+    # try:
+    #     os.remove(path)
+    # except:
+    #     print_error('error removing temp file')
 
     print('took {} s to find {} pictures'.format(took, len(found)))
 

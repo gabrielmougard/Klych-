@@ -24,12 +24,19 @@ def image_transpose_exif(im, exif):
     else:
         return functools.reduce(type(im).transpose, seq, im)
 
-def resize_image(path, width):
+def resize_image(path, width, output=None):
     with Image.open(path) as img:
         if img.size[0] > width :
             wpercent = (width / float(img.size[0]))
             hsize = int((float(img.size[1]) * float(wpercent)))
-            exif = img._getexif()
             img = img.resize((width, hsize))
-        img = image_transpose_exif(img, exif)
-        img.save(path)
+        try:
+            exif = img._getexif()
+            img = image_transpose_exif(img, exif)
+        except:
+            pass
+        try :
+            img.save(output if output != None else path)
+        except :
+            img = img.convert("RGB")
+            img.save(output if output != None else path)

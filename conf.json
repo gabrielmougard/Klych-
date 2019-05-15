@@ -3,7 +3,7 @@
     "img_serv_port":8082,
     "base_password":"leubzezeh97869UYVD",
     "upload_folder":"./photos",
-    "db_filename":"test_db.json",
+    "db_filename":"face_db.json",
     "use_gpu":false,
     "tolerance":0.5,
     "using_resize":true,
