@@ -1,6 +1,9 @@
 import multiprocessing as mp
-import threading
 import psutil
+
+
+# Add join capabilities
+
 
 class Task:
     __slots__ = ['func', 'args']
@@ -34,8 +37,7 @@ class Pool:
     def _new_worker(self):
         idx = self.get_id_worker()
         affinity = self.get_affinity()
-        d = d = dict(affinity=affinity)
-        print('created worker with affinity {}'.format(affinity))
+        d = dict(affinity=affinity)
         w = Worker(self, mp.Queue(), mp.Queue(), mp.Event(), idx, mp.Lock(), kwargs=d)
         self.workers.append(w)
         self.free_workers.put(idx)
@@ -96,7 +98,6 @@ class Worker(mp.Process):
                 self.output_queue.put(result)
             finally:
                 self.pool.reset_worker(self.idx)
-                # self.event.set()
 
     def stop(self):
         self.stopped = True
